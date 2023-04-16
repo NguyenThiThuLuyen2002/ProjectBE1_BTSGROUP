@@ -1,10 +1,12 @@
 const mysql= require("mysql");
 
+require('dotenv').config()
+
 connection = mysql.createPool({
-    host:"localhost",
-    user:"root",
-    password:"thuluyen",
-    database:"nodejsDB"
+    host: process.env.ENV_HOST,
+    user: process.env.ENV_USER,
+    password: process.env.ENV_PASSWORD,
+    database: process.env.ENV_DATABASE
 })
 
 connection.getConnection((err,connection) => {
@@ -20,4 +22,4 @@ connection.getConnection((err,connection) => {
 //     console.log(err),
 //     console.log(result)
 // })
-module.exports = connection
+module.exports = connection;
