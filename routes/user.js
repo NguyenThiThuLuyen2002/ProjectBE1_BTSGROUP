@@ -2,39 +2,32 @@ const express = require('express');
 const user_router = express.Router();
 
 const connection = require('../database/connection')
-let users = [
-	{
-		"id": 1,
-		"fullname": "Nguyen Van A",
-		"gender": true,
-		"age": 21
-	},
-	{
-		"id": 2,
-		"fullname": "Nguyen Van B ",
-		"gender": false,
-		"age": 22
-	}
-]
+
 user_router.get("/",(req, res) =>{
-    console.log(req.params)
-    console.log(req.query)
-    console.log(req.body)
+    connection.query("SELECT * FROM users", (err, result) => {
+        if( err) console.log(err)
+        res.status(200).json(result)
+    })
     
-    // Trả về đối tượng JSON với mã trạng thái HTTP là 200
-    res.status(200).json(users);
+    // // Trả về đối tượng JSON với mã trạng thái HTTP là 200
+    // res.status(200).json(users);
 })
 
 user_router.get("/:id",(req, res) =>{
     const userId = parseInt(req.params.id);
-    // Tìm user có id tương ứng trong danh sách users
-    const user = users.find(u => u.id === userId);
+    connection.query("SELECT * FROM users where id= ?",userId, (err, result) => {
+        if( err) console.log(err)
+        res.status(200).json(result)
+    })
+    // const userId = parseInt(req.params.id);
+    // // Tìm user có id tương ứng trong danh sách users
+    // const user = users.find(u => u.id === userId);
 
-    // Kiểm tra xem user có tồn tại hay không
-    if (!user) {
-        res.status(404).send("User not found")
-    }
-    res.status(200).json(user);
+    // // Kiểm tra xem user có tồn tại hay không
+    // if (!user) {
+    //     res.status(404).send("User not found")
+    // }
+    // res.status(200).json(user);
 })
 user_router.put("/:id",(req, res) =>{
     const userId = parseInt(req.params.id);
